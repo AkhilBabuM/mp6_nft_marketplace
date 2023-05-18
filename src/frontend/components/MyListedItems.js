@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
-import { Row, Col, Card } from 'react-bootstrap'
+import { Row, Col, Card, Container } from 'react-bootstrap'
 
 function renderSoldItems(items) {
   return (
     <>
-      <h2>Sold</h2>
+      <Container className='bg-dark text-white'><h2>SOLD</h2></Container>
       <Row xs={1} md={2} lg={4} className="g-4 py-3">
         {items.map((item, idx) => (
           <Col key={idx} className="overflow-hidden">
             <Card>
-              <Card.Img variant="top" src={item.image} />
+              <Card.Img variant="top" src={`https://ipfs.io/ipfs/${item.image.replace('ipfs://', '')}`} />
               <Card.Footer>
                 For {ethers.utils.formatEther(item.totalPrice)} ETH - Received {ethers.utils.formatEther(item.price)} ETH
               </Card.Footer>
@@ -73,7 +73,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
     <div className="flex justify-center">
       {listedItems.length > 0 ?
         <div className="px-5 py-3 container">
-          <h2>Listed</h2>
+          <Container className='bg-dark text-white'><h2>LISTED</h2></Container>
           <Row xs={1} md={2} lg={4} className="g-4 py-3">
             {listedItems.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
@@ -89,7 +89,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
             {soldItems.length > 0 && renderSoldItems(soldItems)}
         </div>
         : (
-          <main style={{ padding: "1rem 0" }}>
+          <main style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
             <h2>No listed assets</h2>
           </main>
         )}

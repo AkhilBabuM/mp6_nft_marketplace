@@ -16,7 +16,7 @@ export default function MyPurchases({ marketplace, nft, account }) {
       // get uri url from nft contract
       const uri = await nft.tokenURI(i.tokenId)
       // use uri to fetch the nft metadata stored on ipfs 
-      const response = await fetch(uri)
+      const response = await fetch(`https://ipfs.io/ipfs/${uri.split('//')[1]}`)
       const metadata = await response.json()
       // get total price of item (item price + fee)
       const totalPrice = await marketplace.getTotalPrice(i.itemId)
@@ -50,7 +50,7 @@ export default function MyPurchases({ marketplace, nft, account }) {
             {purchases.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
-                  <Card.Img variant="top" src={item.image} />
+                  <Card.Img variant="top" src={`https://ipfs.io/ipfs/${item.image.replace('ipfs://', '')}`} />
                   <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
                 </Card>
               </Col>
@@ -58,7 +58,7 @@ export default function MyPurchases({ marketplace, nft, account }) {
           </Row>
         </div>
         : (
-          <main style={{ padding: "1rem 0" }}>
+          <main style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
             <h2>No purchases</h2>
           </main>
         )}

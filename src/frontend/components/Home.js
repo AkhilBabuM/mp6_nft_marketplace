@@ -77,7 +77,7 @@ const Home = ({ marketplace, nft }) => {
           </Row>
         </div>
         : (
-          <main style={{ padding: "1rem 0" }}>
+          <main style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
             <h2>No listed assets</h2>
           </main>
         )}
