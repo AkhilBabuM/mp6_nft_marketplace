@@ -53,13 +53,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className="App bg-secondary" style={{ height:'100%', backgroundColor:'red', minHeight: '100vh' }}>
         <>
           <Navigation web3Handler={web3Handler} account={account} />
         </>
         <div>
           {loading ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '91vh' }}>
               <Spinner animation="border" style={{ display: 'flex' }} />
               <p className='mx-3 my-0'>Please connect metamask extension</p>
             </div>
