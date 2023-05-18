@@ -43,7 +43,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
         const metadata = await response.json()
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(i.itemId)
-        // define listed item object
+        // define listed Item object
         let item = {
           totalPrice,
           price: i.price,
