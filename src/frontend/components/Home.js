@@ -14,8 +14,10 @@ const Home = ({ marketplace, nft }) => {
       if (!item.sold) {
         // get uri url from nft contract
         const uri = await nft.tokenURI(item.tokenId)
+        console.log(uri)
+        console.log((`https://ipfs.io/ipfs/${uri.split('//')[1]}`))
         // use uri to fetch the nft metadata stored on ipfs 
-        const response = await fetch(uri)
+        const response = await fetch(`https://ipfs.io/ipfs/${uri.split('//')[1]}`)
         const metadata = await response.json()
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(item.itemId)
@@ -55,7 +57,7 @@ const Home = ({ marketplace, nft }) => {
             {items.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
-                  <Card.Img variant="top" src={item.image} />
+                  <Card.Img variant="top" src={`https://ipfs.io/ipfs/${item.image.replace('ipfs://', '')}`} />
                   <Card.Body color="secondary">
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>

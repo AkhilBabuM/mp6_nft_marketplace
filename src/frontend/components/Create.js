@@ -1,38 +1,55 @@
 import { useState } from 'react'
 import { ethers } from "ethers"
 import { Row, Form, Button } from 'react-bootstrap'
-import { create as ipfsHttpClient } from 'ipfs-http-client'
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
+import { NFTStorage, File } from 'nft.storage'
+
+const client = new NFTStorage({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDE2RkI0NDc5QUVEMDU3RTA5MUMyM0VhRjE5RTdjYWQyMjFEZTZlMmMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4MTIzNjE2MTQ5MiwibmFtZSI6Im5mdHN0b3JhZ2UifQ.nzL-gbeL_9VZymTjM5Oz2xpGoqsUc9FMnLGxKvfnapQ' })
 
 const Create = ({ marketplace, nft }) => {
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState(null)
   const [price, setPrice] = useState(null)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+
   const uploadToIPFS = async (event) => {
     event.preventDefault()
     const file = event.target.files[0]
     if (typeof file !== 'undefined') {
       try {
-        const result = await client.add(file)
-        console.log(result)
-        setImage(`https://ipfs.infura.io/ipfs/${result.path}`)
+        const metadata = await client.store({
+          name: file.name,
+          description: 'Uploaded using NFT.Storage',
+          image: new File([file], file.name, { type: file.type })
+        })
+        console.log(metadata)
+        setImage(new File([file], file.name, { type: file.type }))
       } catch (error){
-        console.log("ipfs image upload error: ", error)
+        console.log("NFT.Storage image upload error: ", error)
       }
     }
   }
+  
+
   const createNFT = async () => {
     if (!image || !price || !name || !description) return
     try{
-      const result = await client.add(JSON.stringify({image, price, name, description}))
-      mintThenList(result)
+      const metadata = await client.store({
+        name,
+        description,
+        image
+      })
+  
+      mintThenList(metadata)
     } catch(error) {
-      console.log("ipfs uri upload error: ", error)
+      console.log("NFT.Storage metadata upload error: ", error)
     }
   }
-  const mintThenList = async (result) => {
-    const uri = `https://ipfs.infura.io/ipfs/${result.path}`
+  
+
+  const mintThenList = async (metadata) => {
+    console.log("mint then list called")
+    const uri = metadata.url
+    console.log("uri is  : " ,uri)
     // mint nft 
     await(await nft.mint(uri)).wait()
     // get tokenId of new nft 
@@ -43,6 +60,7 @@ const Create = ({ marketplace, nft }) => {
     const listingPrice = ethers.utils.parseEther(price.toString())
     await(await marketplace.makeItem(nft.address, id, listingPrice)).wait()
   }
+
   return (
     <div className="container-fluid mt-5">
       <div className="row">
@@ -71,4 +89,4 @@ const Create = ({ marketplace, nft }) => {
   );
 }
 
-export default Create
+export default Create;

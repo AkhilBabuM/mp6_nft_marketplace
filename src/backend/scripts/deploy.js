@@ -11,6 +11,7 @@ async function main() {
   // deploy contracts
   const marketplace = await Marketplace.deploy(1);
   const nft = await NFT.deploy();
+  console.log("Contract address is : ",nft.address);
   // Save copies of each contracts abi and address to the frontend.
   saveFrontendFiles(marketplace , "Marketplace");
   saveFrontendFiles(nft , "NFT");

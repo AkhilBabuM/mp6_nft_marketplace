@@ -12,7 +12,7 @@ function renderSoldItems(items) {
             <Card>
               <Card.Img variant="top" src={item.image} />
               <Card.Footer>
-                For {ethers.utils.formatEther(item.totalPrice)} ETH - Recieved {ethers.utils.formatEther(item.price)} ETH
+                For {ethers.utils.formatEther(item.totalPrice)} ETH - Received {ethers.utils.formatEther(item.price)} ETH
               </Card.Footer>
             </Card>
           </Col>
@@ -36,8 +36,10 @@ export default function MyListedItems({ marketplace, nft, account }) {
       if (i.seller.toLowerCase() === account) {
         // get uri url from nft contract
         const uri = await nft.tokenURI(i.tokenId)
+        console.log(uri)
+        console.log((`https://ipfs.io/ipfs/${uri.split('//')[1]}`))
         // use uri to fetch the nft metadata stored on ipfs 
-        const response = await fetch(uri)
+        const response = await fetch(`https://ipfs.io/ipfs/${uri.split('//')[1]}`)
         const metadata = await response.json()
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(i.itemId)
@@ -71,16 +73,18 @@ export default function MyListedItems({ marketplace, nft, account }) {
     <div className="flex justify-center">
       {listedItems.length > 0 ?
         <div className="px-5 py-3 container">
-            <h2>Listed</h2>
+          <h2>Listed</h2>
           <Row xs={1} md={2} lg={4} className="g-4 py-3">
             {listedItems.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
-                  <Card.Img variant="top" src={item.image} />
+                <Card.Img variant="top" src={`https://ipfs.io/ipfs/${item.image.replace('ipfs://', '')}`} />
+
                   <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
                 </Card>
               </Col>
             ))}
+
           </Row>
             {soldItems.length > 0 && renderSoldItems(soldItems)}
         </div>
