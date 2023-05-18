@@ -10,14 +10,16 @@ const Navigation = ({ web3Handler, account }) => {
     return (
         <Navbar expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="#home">
-                    <img
-                    src={logo}
-                    height="60"
-                    className="d-inline-block align-top"
-                    alt="React Bootstrap logo"
-                    />
-                </Navbar.Brand>
+                <Nav.Link as={Link} to="/">
+                    <Navbar.Brand href="#home">
+                        <img
+                        src={logo}
+                        height="60"
+                        className="d-inline-block align-top"
+                        alt="React Bootstrap logo"
+                        />
+                    </Navbar.Brand>
+                </Nav.Link>
               
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
